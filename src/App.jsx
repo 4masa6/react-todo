@@ -3,8 +3,8 @@ import "./styles.css";
 
 export const App = () => {
   const [todoText, setTodoText] = useState(""); // 入力値を保持するstate
-  const [incompleteTodos, setIncompleteTodos] = useState(["あああ", "いいい"]); // 未完了のTODOを保持するstate
-  const [completeTodos, setCompleteTodos] = useState(["ううう"]); // 完了のTODOを保持するstate
+  const [incompleteTodos, setIncompleteTodos] = useState([]); // 未完了のTODOを保持するstate
+  const [completeTodos, setCompleteTodos] = useState([]); // 完了のTODOを保持するstate
 
   // 入力値が変更されたら、その値をtodoTextにセット
   const onChangeTodoText = (event) => setTodoText(event.target.value);
@@ -34,6 +34,16 @@ export const App = () => {
     // 完了の配列に追加
     const newCompleteTodos = [...completeTodos, incompleteTodos[index]];
     setCompleteTodos(newCompleteTodos);
+  };
+
+  // 戻すボタンを押したときの処理
+  const onClickBack = (index) => {
+    const newCompleteTodos = [...completeTodos];
+    newCompleteTodos.splice(index, 1);
+    setCompleteTodos(newCompleteTodos);
+
+    const newIncompleteTodos = [...incompleteTodos, completeTodos[index]];
+    setIncompleteTodos(newIncompleteTodos);
   };
 
   return (
@@ -68,11 +78,17 @@ export const App = () => {
       <div className="complete-area">
         <p className="title">完了のTODO</p>
         <ul>
-          {completeTodos.map((todo) => {
+          {completeTodos.map((todo, index) => {
             return (
               <div key={todo} className="list-row">
                 <li>{todo}</li>
-                <button>戻す</button>
+                <button
+                  onClick={() => {
+                    onClickBack(index);
+                  }}
+                >
+                  戻す
+                </button>
               </div>
             );
           })}
