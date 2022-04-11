@@ -16,6 +16,14 @@ export const App = () => {
     setTodoText(""); // フォームの値を削除する
   };
 
+  // 削除ボタンを押された時の処理
+  const onClickDelete = (index) => {
+    // 新しい配列を用意 ⇒ index番の要素を削除する ⇒ inCompleteTodosにセット
+    const newTodos = [...incompleteTodos];
+    newTodos.splice(index, 1);
+    setIncompleteTodos(newTodos);
+  };
+
   return (
     <>
       <div className="input-area">
@@ -30,13 +38,16 @@ export const App = () => {
       <div className="incomplete-area">
         <p className="title">未完了のTODO</p>
         <ul>
-          {incompleteTodos.map((todo) => {
+          {incompleteTodos.map((todo, index) => {
+            // 第２引数にindex番号を取得できる
             return (
               // Reactでループを書く時（mapやfilter）は、keyの指定が必要
               <div key={todo} className="list-row">
                 <li>{todo}</li>
                 <button>完了</button>
-                <button>削除</button>
+                {/* onClickDeleteに引数を渡すが、onClickDelete(index)とするとこの時点で関数が実行されてしまうので注意 */}
+                {/* 関数に引数を渡したい場合はアロー関数の形で書いてあげる */}
+                <button onClick={() => onClickDelete(index)}>削除</button>
               </div>
             );
           })}
